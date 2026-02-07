@@ -429,9 +429,39 @@
       updateLogCount();
     }
 
+    function getCompletedSentence(sentence, answer) {
+      const tokens = String(sentence).split(/\s+/).filter(Boolean);
+      const ansUpper = answer.toUpperCase();
+      if(tokens.length === 0) return sentence;
+
+      // 1) Prefer noun right after a known preposition
+      for(let i = 0; i < tokens.length - 1; i++){
+        const t = cleanToken(tokens[i]).toLowerCase();
+        const nextLower = cleanToken(tokens[i + 1]).toLowerCase();
+
+        if(PREPS.has(t) && isNounToken(tokens[i + 1]) && !ARTICLES.has(nextLower)){
+          tokens[i + 1] = ansUpper + " " + tokens[i + 1];
+          return tokens.join(" ");
+        }
+      }
+
+      // 2) Otherwise: first noun that doesn't already have an article right before it
+      for(let i = 1; i < tokens.length; i++){
+        const prevLower = cleanToken(tokens[i - 1]).toLowerCase();
+        const curLower = cleanToken(tokens[i]).toLowerCase();
+
+        if(isNounToken(tokens[i]) && !ARTICLES.has(prevLower) && !ARTICLES.has(curLower)){
+          tokens[i] = ansUpper + " " + tokens[i];
+          return tokens.join(" ");
+        }
+      }
+
+      return sentence;
+    }
+
     function addLogEntry(selected, correctAnswer, isCorrect){
       // take what user sees (without HTML)
-      const sentenceText = document.getElementById("sentence").textContent.trim();
+      const sentenceText = getCompletedSentence(questions[currentIndex].sentence, correctAnswer);
 
       answerLog.unshift({
         t: Date.now(),
