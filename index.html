@@ -88,11 +88,6 @@
       line-height: 1.35;
     }
 
-    .underline{
-      border-bottom: 4px solid #8b5cf6;
-      padding: 0 12px;
-    }
-
     .hint{
       text-align: center;
       color: #9ca3af;
@@ -130,6 +125,16 @@
       text-align: center;
       font-weight: 600;
       min-height: 24px;
+    }
+
+    /* ---- One underline only (blank) ---- */
+    .blank{
+      display: inline-block;
+      border-bottom: 4px solid #8b5cf6;
+      min-width: 70px;
+      height: 0.95em;
+      vertical-align: -0.12em;
+      margin: 0 8px 0 6px;
     }
 
     /* --- Bottom log --- */
@@ -210,7 +215,7 @@
   <div class="container">
     <h1>Dativ oder Akkusativ?</h1>
 
-    <!-- swapped: Schwer left, Leicht right -->
+    <!-- Easy/Hard swapped: Schwer left, Leicht right -->
     <div class="toggle-container">
       <span>Schwer</span>
       <div class="toggle-switch active" id="toggle-switch">
@@ -234,7 +239,6 @@
     <div id="options" class="options"></div>
     <div id="feedback" class="feedback"></div>
 
-    <!-- bottom log -->
     <div id="log-box" class="log-box hidden">
       <div class="log-box-head">
         <div>Antwortprotokoll</div>
@@ -252,11 +256,60 @@
     const LOG_KEY = "answerLogV1";
     let answerLog = [];
 
+    const ARTICLES = new Set([
+      "der","die","das","den","dem","des",
+      "ein","eine","einen","einem","einer","eines"
+    ]);
+
+    const PREPS = new Set([
+      "mit","bei","von","zu","aus","seit",
+      "für","ohne","durch","gegen","um","bis","auf"
+    ]);
+
     function shuffleArray(a){
       for(let i = a.length - 1; i > 0; i--){
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
       }
+    }
+
+    function cleanToken(tok){
+      return tok.replace(/[.,!?;:]+$/g, "");
+    }
+
+    function isNounToken(tok){
+      const w = cleanToken(tok);
+      return /^[A-ZÄÖÜ]/.test(w);
+    }
+
+    // Inserts ONE blank underline (no ___ text) before the target noun
+    function renderSentenceWithBlank(sentence){
+      const tokens = String(sentence).split(/\s+/).filter(Boolean);
+      if(tokens.length === 0) return sentence;
+
+      // 1) Prefer noun right after a known preposition
+      for(let i = 0; i < tokens.length - 1; i++){
+        const t = cleanToken(tokens[i]).toLowerCase();
+        const nextLower = cleanToken(tokens[i + 1]).toLowerCase();
+
+        if(PREPS.has(t) && isNounToken(tokens[i + 1]) && !ARTICLES.has(nextLower)){
+          tokens[i + 1] = `<span class="blank"></span>` + tokens[i + 1];
+          return tokens.join(" ");
+        }
+      }
+
+      // 2) Otherwise: first noun that doesn't already have an article right before it
+      for(let i = 1; i < tokens.length; i++){
+        const prevLower = cleanToken(tokens[i - 1]).toLowerCase();
+        const curLower = cleanToken(tokens[i]).toLowerCase();
+
+        if(isNounToken(tokens[i]) && !ARTICLES.has(prevLower) && !ARTICLES.has(curLower)){
+          tokens[i] = `<span class="blank"></span>` + tokens[i];
+          return tokens.join(" ");
+        }
+      }
+
+      return sentence;
     }
 
     function startQuiz(){
@@ -270,7 +323,8 @@
 
     function showQuestion(){
       const q = questions[currentIndex];
-      document.getElementById("sentence").innerHTML = q.sentence;
+
+      document.getElementById("sentence").innerHTML = renderSentenceWithBlank(q.sentence);
 
       const hintEl = document.getElementById("hint");
       hintEl.textContent = q.hint;
@@ -312,7 +366,7 @@
       }
 
       updateScore();
-      addLogEntry(q, sel, sel === q.answer);
+      addLogEntry(sel, q.answer, sel === q.answer);
 
       setTimeout(() => {
         currentIndex = (currentIndex + 1) % questions.length;
@@ -331,7 +385,7 @@
       document.getElementById("wrong-count").textContent = wrong;
     }
 
-    // Hint toggle (Leicht/Schwer switch)
+    // Hint switch
     document.getElementById("toggle-switch").onclick = () => {
       showHint = !showHint;
       document.getElementById("toggle-switch").classList.toggle("active", showHint);
@@ -346,12 +400,6 @@
 
     function saveLog(){
       localStorage.setItem(LOG_KEY, JSON.stringify(answerLog));
-    }
-
-    function stripHtml(html){
-      const d = document.createElement("div");
-      d.innerHTML = html;
-      return (d.textContent || "").trim();
     }
 
     function updateLogCount(){
@@ -381,16 +429,19 @@
       updateLogCount();
     }
 
-    function addLogEntry(q, selected, isCorrect){
+    function addLogEntry(selected, correctAnswer, isCorrect){
+      // take what user sees (without HTML)
+      const sentenceText = document.getElementById("sentence").textContent.trim();
+
       answerLog.unshift({
         t: Date.now(),
-        sentence: stripHtml(q.sentence),
+        sentence: sentenceText,
         selected,
-        correct: q.answer,
+        correct: correctAnswer,
         ok: isCorrect
       });
-      answerLog = answerLog.slice(0, 300);
 
+      answerLog = answerLog.slice(0, 300);
       saveLog();
       renderLog();
     }

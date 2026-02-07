@@ -86,13 +86,25 @@ const questions = [
 
 { sentence: 'Er wohnt bei Eltern.', options: ['die','den','der','dem'], answer: 'den', hint: 'bei + Dativ Plural' },
 
-{ sentence: 'Das Geschenk ist von Freund.', options: ['der','den','dem','des'], answer: 'dem', hint: 'von + Dativ' },
+/* заміна: von + dem = vom */
+{ sentence: 'Das Geschenk ist Freund.', options: ['vom','von der','von den'], answer: 'vom', hint: 'von + Dativ (vom = von dem)' },
 
-{ sentence: 'Ich gehe zu Arzt.', options: ['der','den','dem','des'], answer: 'dem', hint: 'zu + Dativ' },
+/* заміна: zu + dem = zum */
+{ sentence: 'Ich gehe Arzt.', options: ['zum','zur','zu den'], answer: 'zum', hint: 'zu + Dativ (zum = zu dem)' },
 
 { sentence: 'Sie kommt aus Schule.', options: ['die','der','den','dem'], answer: 'der', hint: 'aus + Dativ' },
 
 { sentence: 'Er lernt Deutsch seit Jahr.', options: ['das','dem','den','des'], answer: 'dem', hint: 'seit + Dativ' },
+
+/* додано: in + dem = im */
+{ sentence: 'Ich bin Park.', options: ['im','in der','in dem'], answer: 'im', hint: 'in + Dativ (im = in dem)' },
+
+{ sentence: 'Das Buch liegt Regal.', options: ['im','in der','in dem'], answer: 'im', hint: 'in + Dativ (im = in dem)' },
+
+/* додано: an + dem = am */
+{ sentence: 'Wir sitzen Tisch.', options: ['am','an der','an dem'], answer: 'am', hint: 'an + Dativ (am = an dem)' },
+
+{ sentence: 'Ich warte Bahnhof.', options: ['am','an der','an dem'], answer: 'am', hint: 'an + Dativ (am = an dem)' },
 
 // --- AKKUSATIV PRÄPOSITIONEN ---
 
@@ -114,7 +126,8 @@ const questions = [
 
 { sentence: 'Sie kauft Blumen für Freundin.', options: ['die','der','den','dem'], answer: 'die', hint: 'für + Akkusativ' },
 
-{ sentence: 'Wir fahren zu Bahnhof.', options: ['der','den','dem','des'], answer: 'dem', hint: 'zu + Dativ' },
+/* заміна: zu + dem = zum */
+{ sentence: 'Wir fahren Bahnhof.', options: ['zum','zur','zu den'], answer: 'zum', hint: 'zu + Dativ (zum = zu dem)' },
 
 { sentence: 'Er geht ohne Jacke.', options: ['die','der','den','dem'], answer: 'die', hint: 'ohne + Akkusativ' }
 
