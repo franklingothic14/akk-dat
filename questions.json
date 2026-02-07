@@ -1,0 +1,72 @@
+[
+  {
+    "id": 1,
+    "sentence": "Я бачу ___ Hund.",
+    "options": ["der", "den", "dem", "die"],
+    "answer": "den",
+    "hint": "Akkusativ (sehen)"
+  },
+  {
+    "id": 2,
+    "sentence": "Я даю ___ Frau книгу.",
+    "options": ["der", "die", "dem", "den"],
+    "answer": "der",
+    "hint": "Dativ (geben)"
+  },
+  {
+    "id": 3,
+    "sentence": "Я йду з ___ Mann.",
+    "options": ["der", "den", "dem"],
+    "answer": "dem",
+    "hint": "Dativ (mit)"
+  },
+  {
+    "id": 4,
+    "sentence": "Я купую ___ Äpfel.",
+    "options": ["die", "den", "dem"],
+    "answer": "die",
+    "hint": "Akkusativ (kaufen, Plural)"
+  },
+  {
+    "id": 5,
+    "sentence": "Я пишу ___ Brief.",
+    "options": ["der", "den", "dem"],
+    "answer": "einen",
+    "hint": "Akkusativ (schreiben)"
+  },
+  {
+    "id": 6,
+    "sentence": "Я допомагаю ___ Kind.",
+    "options": ["dem", "das", "den"],
+    "answer": "dem",
+    "hint": "Dativ (helfen)"
+  },
+  {
+    "id": 7,
+    "sentence": "Я кладу книгу на ___ Tisch.",
+    "options": ["der", "den", "dem"],
+    "answer": "den",
+    "hint": "Akkusativ (auf... hin)"
+  },
+  {
+    "id": 8,
+    "sentence": "Я дякую ___ Lehrerin.",
+    "options": ["der", "die", "dem"],
+    "answer": "der",
+    "hint": "Dativ (danken)"
+  },
+  {
+    "id": 9,
+    "sentence": "Я малюю ___ Haus.",
+    "options": ["das", "den", "dem"],
+    "answer": "das",
+    "hint": "Akkusativ (malen)"
+  },
+  {
+    "id": 10,
+    "sentence": "Я говорю з ___ Freunden.",
+    "options": ["die", "den", "dem"],
+    "answer": "den",
+    "hint": "Dativ (mit, Plural)"
+  }
+]
