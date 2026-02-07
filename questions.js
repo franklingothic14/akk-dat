@@ -131,4 +131,39 @@ const questions = [
 
 { sentence: 'Er geht ohne Jacke.', options: ['die','der','den','dem'], answer: 'die', hint: 'ohne + Akkusativ' }
 
+,
+// --- NEUE FRAGEN (ZUSATZ) ---
+
+// Verben mit Dativ
+{ sentence: 'Die Suppe schmeckt Kind.', options: ['dem', 'den', 'das'], answer: 'dem', hint: 'Dativ (schmecken)' },
+{ sentence: 'Das Buch gehört Schüler.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (gehören)' },
+{ sentence: 'Der Film gefällt Frau.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'Dativ (gefallen)' },
+{ sentence: 'Ich glaube Freund.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (glauben)' },
+
+// Verben mit Akkusativ
+{ sentence: 'Ich kenne Mann.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'Akkusativ (kennen)' },
+{ sentence: 'Wir besuchen Oma.', options: ['die', 'der', 'den'], answer: 'die', hint: 'Akkusativ (besuchen)' },
+{ sentence: 'Er repariert Auto.', options: ['das', 'dem', 'den'], answer: 'das', hint: 'Akkusativ (reparieren)' },
+{ sentence: 'Sie liest Buch.', options: ['das', 'dem', 'den'], answer: 'das', hint: 'Akkusativ (lesen)' },
+
+// Wechselpräpositionen (Wo? -> Dativ)
+{ sentence: 'Das Bild hängt an Wand.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'an + Dativ (Wo?)' },
+{ sentence: 'Wir sitzen auf Sofa.', options: ['dem', 'den', 'das'], answer: 'dem', hint: 'auf + Dativ (Wo?)' },
+{ sentence: 'Die Katze schläft unter Tisch.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'unter + Dativ (Wo?)' },
+{ sentence: 'Die Schuhe stehen vor Tür.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'vor + Dativ (Wo?)' },
+
+// Wechselpräpositionen (Wohin? -> Akkusativ)
+{ sentence: 'Ich hänge das Bild an Wand.', options: ['die', 'der', 'den'], answer: 'die', hint: 'an + Akkusativ (Wohin?)' },
+{ sentence: 'Wir setzen uns auf Sofa.', options: ['das', 'dem', 'den'], answer: 'das', hint: 'auf + Akkusativ (Wohin?)' },
+{ sentence: 'Die Katze läuft unter Tisch.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'unter + Akkusativ (Wohin?)' },
+{ sentence: 'Er stellt die Schuhe vor Tür.', options: ['die', 'der', 'den'], answer: 'die', hint: 'vor + Akkusativ (Wohin?)' },
+
+// Präpositionen Mix
+{ sentence: 'Wir gehen durch Wald.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'durch + Akkusativ' },
+{ sentence: 'Er kommt aus Haus.', options: ['dem', 'den', 'das'], answer: 'dem', hint: 'aus + Dativ' },
+{ sentence: 'Das ist für Vater.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'für + Akkusativ' },
+{ sentence: 'Ich wohne bei Tante.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'bei + Dativ' },
+{ sentence: 'Wir fahren nach Arbeit.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'nach + Dativ' },
+{ sentence: 'Er läuft gegen Baum.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'gegen + Akkusativ' }
+
 ];
