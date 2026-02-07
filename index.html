@@ -1,24 +1,29 @@
 <!DOCTYPE html>
-<html lang="uk">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Тренер артиклі: Akkusativ / Dativ</title>
+    <title>Artikeltrainer: Akkusativ / Dativ</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
-        <h1>🎯 Артиклі: Akkusativ чи Dativ?</h1>
-        <div id="progress">Питання <span id="current">1</span>/10</div>
-        <div id="sentence" class="sentence">Завантажуємо...</div>
+        <h1>Artikeltrainer: Akkusativ oder Dativ?</h1>
+
+        <div id="progress">Frage <span id="current">1</span>/<span id="total">10</span></div>
+
+        <div id="sentence" class="sentence">Lade...</div>
         <div id="hint" class="hint"></div>
+
         <div id="options" class="options"></div>
-        <div class="controls">
-            <button id="prev" disabled>← Назад</button>
-            <button id="next">Далі →</button>
-            <button id="restart">Заново</button>
+
+        <div id="feedback" class="feedback"></div>
+
+        <div class="top-controls">
+            <button id="restart">Neu starten</button>
         </div>
-        <div id="score">Очки: <span id="score-val">0</span>/10</div>
+
+        <div id="score">Punkte: <span id="score-val">0</span>/<span id="score-total">10</span></div>
     </div>
     <script src="app.js"></script>
 </body>

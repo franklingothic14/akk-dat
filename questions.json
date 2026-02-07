@@ -1,72 +1,72 @@
 [
   {
     "id": 1,
-    "sentence": "Я бачу ___ Hund.",
+    "sentence": "Ich sehe ___ Hund.",
     "options": ["der", "den", "dem", "die"],
     "answer": "den",
     "hint": "Akkusativ (sehen)"
   },
   {
     "id": 2,
-    "sentence": "Я даю ___ Frau книгу.",
+    "sentence": "Ich gebe ___ Frau ein Buch.",
     "options": ["der", "die", "dem", "den"],
     "answer": "der",
     "hint": "Dativ (geben)"
   },
   {
     "id": 3,
-    "sentence": "Я йду з ___ Mann.",
+    "sentence": "Ich gehe mit ___ Mann.",
     "options": ["der", "den", "dem"],
     "answer": "dem",
     "hint": "Dativ (mit)"
   },
   {
     "id": 4,
-    "sentence": "Я купую ___ Äpfel.",
+    "sentence": "Ich kaufe ___ Äpfel.",
     "options": ["die", "den", "dem"],
     "answer": "die",
-    "hint": "Akkusativ (kaufen, Plural)"
+    "hint": "Akkusativ (Plural, kaufen)"
   },
   {
     "id": 5,
-    "sentence": "Я пишу ___ Brief.",
-    "options": ["der", "den", "dem"],
+    "sentence": "Ich schreibe ___ Brief.",
+    "options": ["ein", "einen", "dem"],
     "answer": "einen",
     "hint": "Akkusativ (schreiben)"
   },
   {
     "id": 6,
-    "sentence": "Я допомагаю ___ Kind.",
+    "sentence": "Ich helfe ___ Kind.",
     "options": ["dem", "das", "den"],
     "answer": "dem",
     "hint": "Dativ (helfen)"
   },
   {
     "id": 7,
-    "sentence": "Я кладу книгу на ___ Tisch.",
+    "sentence": "Ich lege das Buch auf ___ Tisch.",
     "options": ["der", "den", "dem"],
     "answer": "den",
-    "hint": "Akkusativ (auf... hin)"
+    "hint": "Akkusativ (Richtung, auf)"
   },
   {
     "id": 8,
-    "sentence": "Я дякую ___ Lehrerin.",
+    "sentence": "Ich danke ___ Lehrerin.",
     "options": ["der", "die", "dem"],
     "answer": "der",
     "hint": "Dativ (danken)"
   },
   {
     "id": 9,
-    "sentence": "Я малюю ___ Haus.",
+    "sentence": "Ich male ___ Haus.",
     "options": ["das", "den", "dem"],
     "answer": "das",
     "hint": "Akkusativ (malen)"
   },
   {
     "id": 10,
-    "sentence": "Я говорю з ___ Freunden.",
+    "sentence": "Ich spreche mit ___ Freunden.",
     "options": ["die", "den", "dem"],
     "answer": "den",
-    "hint": "Dativ (mit, Plural)"
+    "hint": "Dativ (Plural, mit)"
   }
 ]
