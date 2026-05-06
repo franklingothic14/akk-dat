@@ -1,504 +1,722 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="de" data-theme="light">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dativ oder Akkusativ Trainer</title>
-
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet">
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #e8e8ec;
+      --surface: #e8e8ec;
+      --text-color: #2a2a35;
+      --text-soft: #7a7a8a;
+      --text-faint: #b0b0bc;
+      --sh-dark: rgba(180, 180, 195, 0.85);
+      --sh-light: rgba(255, 255, 255, 0.92);
+      --neo-raise: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light);
+      --neo-raise-lg: 10px 10px 28px var(--sh-dark), -10px -10px 28px var(--sh-light);
+      --neo-inset: inset 4px 4px 10px var(--sh-dark), inset -4px -4px 10px var(--sh-light);
+      --acc: #7c5cbf;
+      --success: #5aaa78;
+      --danger: #d07070;
+      --radius: 1.4rem;
+      --radius-full: 9999px;
+      --font: 'Plus Jakarta Sans', system-ui, sans-serif;
+    }
 
-    body{
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    [data-theme="dark"] {
+      --bg: #1e1e24;
+      --surface: #1e1e24;
+      --text-color: #e8e4de;
+      --text-soft: #9090a0;
+      --text-faint: #55555f;
+      --sh-dark: rgba(0, 0, 0, 0.60);
+      --sh-light: rgba(255, 255, 255, 0.048);
+      --neo-raise: 6px 6px 14px var(--sh-dark), -6px -6px 14px var(--sh-light);
+      --neo-raise-lg: 10px 10px 28px var(--sh-dark), -10px -10px 28px var(--sh-light);
+      --neo-inset: inset 4px 4px 10px rgba(0, 0, 0, .55), inset -4px -4px 10px rgba(255, 255, 255, .04);
+      --acc: #8b6fd4;
+      --success: #6aaa7e;
+      --danger: #c97a73;
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      -webkit-font-smoothing: antialiased;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--bg);
+      color: var(--text-color);
       min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 20px;
-    }
-
-    .container{
-      background: white;
-      border-radius: 24px;
-      padding: 36px;
-      max-width: 580px;
-      width: 100%;
-      box-shadow: 0 25px 50px rgba(0,0,0,0.15);
-    }
-
-    h1{
-      text-align: center;
-      margin-bottom: 14px;
-    }
-
-    .toggle-container{
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-bottom: 14px;
-      font-weight: 600;
-      color: #6b7280;
-      user-select: none;
-    }
-
-    .toggle-switch{
-      position: relative;
-      width: 44px;
-      height: 24px;
-      background: #e5e7eb;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: .2s;
-    }
-
-    .toggle-switch.active{ background: #8b5cf6; }
-
-    .toggle-slider{
-      position: absolute;
-      top: 2px;
-      left: 2px;
-      width: 20px;
-      height: 20px;
-      background: white;
-      border-radius: 50%;
-      transition: .2s;
-    }
-
-    .toggle-switch.active .toggle-slider{
-      transform: translateX(20px);
-    }
-
-    .scoreboard{
-      text-align: center;
-      font-weight: 700;
-      margin-bottom: 14px;
-    }
-
-    .correct-count{ color: #16a34a; }
-    .wrong-count{ color: #dc2626; }
-
-    .sentence{
-      text-align: center;
-      font-size: 1.5em;
-      margin-bottom: 16px;
-      background: #f9fafb;
       padding: 24px;
-      border-radius: 16px;
-      line-height: 1.35;
+      transition: background .3s, color .3s;
     }
 
-    .hint{
-      text-align: center;
-      color: #9ca3af;
-      margin-bottom: 20px;
-      font-style: italic;
-      min-height: 20px;
-    }
-
-    .hidden{ display: none; }
-
-    .options{
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      margin-bottom: 20px;
-    }
-
-    .option{
-      padding: 12px 22px;
-      border: none;
-      border-radius: 10px;
-      background: #8b5cf6;
-      color: white;
+    button {
+      font: inherit;
       cursor: pointer;
-      font-weight: 600;
-      transition: .2s;
     }
 
-    .option.correct{ background: #22c55e; }
-    .option.wrong{ background: #ef4444; }
-    .option.disabled{ opacity: .6; cursor: default; }
-
-    .feedback{
-      text-align: center;
-      font-weight: 600;
-      min-height: 24px;
+    .card {
+      width: min(680px, 100%);
     }
 
-    /* ---- One underline only (blank) ---- */
-    .blank{
-      display: inline-block;
-      border-bottom: 4px solid #8b5cf6;
-      min-width: 70px;
-      height: 0.95em;
-      vertical-align: -0.12em;
-      margin: 0 8px 0 6px;
-    }
-
-    /* --- Bottom log --- */
-    .top-actions{
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin: 10px 0 12px;
-    }
-
-    .log-btn{
-      padding: 10px 14px;
-      border: none;
-      border-radius: 10px;
-      background: #111827;
-      color: #fff;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .log-clear-btn{
-      padding: 10px 14px;
-      border: none;
-      border-radius: 10px;
-      background: #e5e7eb;
-      color: #111827;
-      cursor: pointer;
-      font-weight: 700;
-    }
-
-    .log-box{
-      margin-top: 14px;
-      background: #f9fafb;
-      border: 1px solid #e5e7eb;
-      border-radius: 14px;
-      padding: 12px;
-    }
-
-    .log-box-head{
+    .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 8px;
-      color: #6b7280;
+      margin-bottom: 1.4rem;
+    }
+
+    .brand {
+      font-size: clamp(1.2rem, 1rem + 1vw, 1.6rem);
       font-weight: 800;
-      font-size: 12px;
-      letter-spacing: .02em;
+      letter-spacing: -.03em;
+      color: var(--text-color);
+    }
+
+    .icon-pill {
+      width: 46px;
+      height: 46px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: var(--surface);
+      color: var(--text-soft);
+      box-shadow: var(--neo-raise);
+      display: grid;
+      place-items: center;
+      font-size: 1.1rem;
+      transition: transform 120ms, box-shadow 120ms;
+    }
+
+    .icon-pill:hover {
+      transform: translateY(-2px);
+    }
+
+    .icon-pill:active {
+      box-shadow: var(--neo-inset);
+      transform: scale(.97);
+    }
+
+    .toggle-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1.3rem;
+      font-size: .85rem;
+      font-weight: 700;
+      user-select: none;
+    }
+
+    .toggle-label {
+      color: var(--text-soft);
+    }
+
+    .neo-toggle {
+      width: 48px;
+      height: 26px;
+      border-radius: var(--radius-full);
+      background: var(--surface);
+      box-shadow: var(--neo-inset);
+      position: relative;
+      cursor: pointer;
+      border: none;
+    }
+
+    .neo-toggle::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: var(--surface);
+      box-shadow: var(--neo-raise);
+      transition: transform .2s;
+    }
+
+    .neo-toggle.active::after {
+      transform: translateX(22px);
+      box-shadow: 3px 3px 8px rgba(124, 92, 191, .45), -1px -1px 4px var(--sh-light);
+    }
+
+    /* main 3-column layout */
+    .main-layout {
+      display: grid;
+      grid-template-columns: 130px 1fr 130px;
+      gap: 1rem;
+      margin-bottom: 1.2rem;
+      align-items: stretch;
+    }
+
+    .score-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--neo-raise-lg);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 1.2rem .8rem;
+      text-align: center;
+    }
+
+    .score-label {
+      font-size: .65rem;
+      font-weight: 800;
       text-transform: uppercase;
+      letter-spacing: .1em;
+      color: var(--text-faint);
+      margin-bottom: .4rem;
     }
 
-    .log-list{
-      font-size: 12px;
-      color: #111827;
-      line-height: 1.35;
+    .score-value {
+      font-size: clamp(2.2rem, 5vw, 3.2rem);
+      font-weight: 800;
+      line-height: 1;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .score-box.ok .score-value {
+      color: var(--success);
+    }
+
+    .score-box.bad .score-value {
+      color: var(--danger);
+    }
+
+    .center-panel {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--neo-raise-lg);
+      padding: 1.6rem 1.4rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: .9rem;
+      min-height: 220px;
+    }
+
+    .sentence-text {
+      font-size: clamp(1.25rem, 2.5vw, 1.7rem);
+      font-weight: 700;
+      line-height: 1.4;
+      text-align: center;
+      color: var(--text-color);
+    }
+
+    .blank {
+      display: inline-block;
+      border-bottom: 3px solid var(--acc);
+      min-width: 56px;
+      height: .9em;
+      vertical-align: -.1em;
+      margin: 0 4px;
+    }
+
+    .options {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .65rem;
+      justify-content: center;
+      width: 100%;
+    }
+
+    .option {
+      padding: .6rem 1.2rem;
+      border: none;
+      border-radius: var(--radius);
+      background: var(--surface);
+      color: var(--text-color);
+      font-weight: 800;
+      font-size: .95rem;
+      box-shadow: var(--neo-raise);
+      transition: transform 120ms, box-shadow 120ms, color 120ms;
+      min-width: 64px;
+    }
+
+    .option:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 8px 8px 20px var(--sh-dark), -8px -8px 20px var(--sh-light);
+    }
+
+    .option:active:not(:disabled) {
+      transform: scale(.97);
+      box-shadow: var(--neo-inset);
+    }
+
+    .option:disabled {
+      cursor: default;
+    }
+
+    .option.correct {
+      color: var(--success);
+      box-shadow: var(--neo-inset), 0 0 16px rgba(90, 170, 120, .2);
+    }
+
+    .option.wrong {
+      color: var(--danger);
+      box-shadow: var(--neo-inset), 0 0 16px rgba(208, 112, 112, .2);
+    }
+
+    .option.disabled {
+      opacity: .65;
+    }
+
+    .hint-text {
+      font-size: .8rem;
+      color: var(--text-faint);
+      font-style: italic;
+      text-align: center;
+      min-height: 1rem;
+    }
+
+    .hint-text.hidden {
+      display: none;
+    }
+
+    .feedback {
+      text-align: center;
+      font-weight: 700;
+      font-size: .88rem;
+      min-height: 1.2rem;
+      color: var(--text-soft);
+    }
+
+    .feedback.ok {
+      color: var(--success);
+    }
+
+    .feedback.bad {
+      color: var(--danger);
+    }
+
+    .log-actions {
+      display: flex;
+      justify-content: center;
+      gap: .75rem;
+      margin-bottom: 1rem;
+    }
+
+    .log-btn,
+    .log-clear-btn {
+      padding: .55rem 1.1rem;
+      border: none;
+      border-radius: var(--radius-full);
+      font-weight: 700;
+      font-size: .8rem;
+      box-shadow: var(--neo-raise);
+      background: var(--surface);
+      color: var(--text-soft);
+      transition: transform 120ms, color 120ms, box-shadow 120ms;
+    }
+
+    .log-btn:hover {
+      transform: translateY(-2px);
+      color: var(--acc);
+    }
+
+    .log-clear-btn:hover {
+      transform: translateY(-2px);
+      color: var(--danger);
+    }
+
+    .log-btn:active,
+    .log-clear-btn:active {
+      box-shadow: var(--neo-inset);
+      transform: scale(.97);
+    }
+
+    .log-box {
+      background: var(--surface);
+      border-radius: var(--radius);
+      box-shadow: var(--neo-raise-lg);
+      padding: 1rem 1.1rem;
+    }
+
+    .log-box.hidden {
+      display: none;
+    }
+
+    .log-box-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: .6rem;
+      font-size: .68rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      color: var(--text-faint);
+    }
+
+    .log-list {
+      font-size: .74rem;
+      line-height: 1.45;
       max-height: 160px;
-      overflow: auto;
-      padding-right: 6px;
+      overflow-y: auto;
+      color: var(--text-soft);
     }
 
-    .log-item{
-      padding: 6px 0;
-      border-bottom: 1px dashed #e5e7eb;
-      white-space: normal;
+    .log-item {
+      padding: 5px 0;
+      border-bottom: 1px solid rgba(128, 128, 148, .12);
     }
 
-    .log-item:last-child{ border-bottom: none; }
-
-    .log-item .meta{
-      color: #6b7280;
+    .log-item:last-child {
+      border-bottom: none;
     }
 
-    .ok{ color: #16a34a; font-weight: 800; }
-    .bad{ color: #dc2626; font-weight: 800; }
+    .log-item .meta {
+      color: var(--text-faint);
+      font-size: .68rem;
+    }
+
+    .ok-mark {
+      color: var(--success);
+      font-weight: 800;
+    }
+
+    .bad-mark {
+      color: var(--danger);
+      font-weight: 800;
+    }
+
+    @media (max-width: 520px) {
+      .main-layout {
+        grid-template-columns: 80px 1fr 80px;
+        gap: .6rem;
+      }
+
+      .score-value {
+        font-size: 2rem;
+      }
+
+      .score-box {
+        padding: .9rem .4rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        transition-duration: .01ms !important;
+      }
+    }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <h1>Dativ oder Akkusativ?</h1>
+  <div class="card">
 
-    <!-- Easy/Hard swapped: Schwer left, Leicht right -->
-    <div class="toggle-container">
-      <span>Schwer</span>
-      <div class="toggle-switch active" id="toggle-switch">
-        <div class="toggle-slider"></div>
+    <div class="topbar">
+      <div class="brand">Dativ oder Akkusativ?</div>
+      <button class="icon-pill" id="themeBtn" aria-label="Theme">&#9680;</button>
+    </div>
+
+    <div class="toggle-wrap">
+      <span class="toggle-label">Leicht</span>
+      <button class="neo-toggle" id="hintToggle" aria-label="Schwer/Leicht"></button>
+      <span class="toggle-label">Schwer</span>
+    </div>
+
+    <div class="main-layout">
+      <div class="score-box ok">
+        <div class="score-label">Richtig</div>
+        <div class="score-value" id="correct-count">0</div>
       </div>
-      <span>Leicht</span>
+
+      <div class="center-panel">
+        <div class="sentence-text" id="sentence"></div>
+        <div class="options" id="options"></div>
+        <div class="hint-text" id="hint"></div>
+        <div class="feedback" id="feedback"></div>
+      </div>
+
+      <div class="score-box bad">
+        <div class="score-label">Falsch</div>
+        <div class="score-value" id="wrong-count">0</div>
+      </div>
     </div>
 
-    <div class="scoreboard">
-      <span id="correct-count" class="correct-count">0</span> /
-      <span id="wrong-count" class="wrong-count">0</span>
+    <div class="log-actions">
+      <button class="log-btn" id="log-toggle" type="button">Protokoll</button>
+      <button class="log-clear-btn" id="log-clear" type="button">Löschen</button>
     </div>
-
-    <div class="top-actions">
-      <button id="log-toggle" class="log-btn" type="button">Protokoll</button>
-      <button id="log-clear" class="log-clear-btn" type="button">Löschen</button>
-    </div>
-
-    <div id="sentence" class="sentence"></div>
-    <div id="hint" class="hint"></div>
-    <div id="options" class="options"></div>
-    <div id="feedback" class="feedback"></div>
 
     <div id="log-box" class="log-box hidden">
       <div class="log-box-head">
-        <div>Antwortprotokoll</div>
-        <div id="log-count">0</div>
+        <span>Antwortprotokoll</span>
+        <span id="log-count">0</span>
       </div>
       <div id="log-list" class="log-list"></div>
     </div>
+
   </div>
-
-  <script src="questions.js"></script>
-
   <script>
-    let currentIndex = 0, correct = 0, wrong = 0, showHint = true;
+    const questions = [
+      { sentence: 'Ich sehe Hund.', options: ['der', 'den', 'dem', 'die'], answer: 'den', hint: 'Akkusativ (sehen)' },
+      { sentence: 'Ich gebe Frau ein Buch.', options: ['der', 'die', 'dem', 'den'], answer: 'der', hint: 'Dativ (geben)' },
+      { sentence: 'Ich gehe mit Mann.', options: ['der', 'den', 'dem'], answer: 'dem', hint: 'Dativ (mit)' },
+      { sentence: 'Ich kaufe Äpfel.', options: ['die', 'den', 'dem'], answer: 'die', hint: 'Akkusativ Plural' },
+      { sentence: 'Ich schreibe Brief.', options: ['ein', 'einen', 'dem'], answer: 'einen', hint: 'Akkusativ' },
+      { sentence: 'Ich helfe Kind.', options: ['dem', 'das', 'den'], answer: 'dem', hint: 'Dativ (helfen)' },
+      { sentence: 'Ich lege das Buch auf Tisch.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ Richtung' },
+      { sentence: 'Ich danke Lehrerin.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'Dativ (danken)' },
+      { sentence: 'Ich male Haus.', options: ['das', 'den', 'dem'], answer: 'das', hint: 'Akkusativ' },
+      { sentence: 'Ich spreche mit Freunden.', options: ['die', 'den', 'dem'], answer: 'den', hint: 'Dativ Plural' },
+      { sentence: 'Er besucht Freund.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ (besuchen)' },
+      { sentence: 'Sie hilft Mutter.', options: ['die', 'der', 'den'], answer: 'der', hint: 'Dativ (helfen)' },
+      { sentence: 'Wir sehen Film.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Ich fahre mit Bus.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (mit)' },
+      { sentence: 'Er bringt Kind ein Geschenk.', options: ['das', 'dem', 'den'], answer: 'dem', hint: 'Dativ (bringen — кому?)' },
+      { sentence: 'Sie kauft Blume.', options: ['die', 'der', 'den'], answer: 'die', hint: 'Akkusativ' },
+      { sentence: 'Ich antworte Lehrer.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (antworten)' },
+      { sentence: 'Wir haben Garten.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Er spricht mit Kollegen.', options: ['die', 'den', 'dem'], answer: 'den', hint: 'Dativ Plural' },
+      { sentence: 'Sie sucht Schlüssel.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Ich vertraue Freund.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (vertrauen)' },
+      { sentence: 'Er kauft Computer.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Sie gratuliert Bruder.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (gratulieren)' },
+      { sentence: 'Wir hören Musik.', options: ['die', 'der', 'den'], answer: 'die', hint: 'Akkusativ' },
+      { sentence: 'Ich folge Auto.', options: ['dem', 'das', 'den'], answer: 'dem', hint: 'Dativ (folgen)' },
+      { sentence: 'Er braucht Stuhl.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Sie begegnet Nachbar.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (begegnen)' },
+      { sentence: 'Ich esse Apfel.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Wir danken Team.', options: ['dem', 'das', 'den'], answer: 'dem', hint: 'Dativ (danken)' },
+      { sentence: 'Er findet Weg.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Sie hilft Freundin.', options: ['die', 'der', 'den'], answer: 'der', hint: 'Dativ' },
+      { sentence: 'Ich nehme Kaffee.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Wir antworten Chef.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ' },
+      { sentence: 'Er sieht Vogel.', options: ['der', 'den', 'dem'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Sie schreibt Freund eine Mail.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (кому?)' },
+      { sentence: 'Ich kaufe Apfel.', options: ['der', 'den', 'dem', 'des'], answer: 'den', hint: 'Akkusativ' },
+      { sentence: 'Ich danke Lehrer.', options: ['der', 'den', 'dem', 'des'], answer: 'dem', hint: 'Dativ (danken)' },
+      { sentence: 'Ich fahre mit dem Bus.', options: ['der', 'den', 'dem', 'des'], answer: 'dem', hint: 'mit + Dativ' },
+      { sentence: 'Er wohnt bei Eltern.', options: ['die', 'den', 'der', 'dem'], answer: 'den', hint: 'bei + Dativ Plural' },
+      { sentence: 'Das Geschenk ist vom Freund.', options: ['vom', 'von der', 'von den'], answer: 'vom', hint: 'von + Dativ (vom = von dem)' },
+      { sentence: 'Ich gehe zum Arzt.', options: ['zum', 'zur', 'zu den'], answer: 'zum', hint: 'zu + Dativ (zum = zu dem)' },
+      { sentence: 'Sie kommt aus Schule.', options: ['die', 'der', 'den', 'dem'], answer: 'der', hint: 'aus + Dativ' },
+      { sentence: 'Er lernt Deutsch seit Jahr.', options: ['das', 'dem', 'den', 'des'], answer: 'dem', hint: 'seit + Dativ' },
+      { sentence: 'Ich bin im Park.', options: ['im', 'in der', 'in dem'], answer: 'im', hint: 'in + Dativ (im = in dem)' },
+      { sentence: 'Das Buch liegt im Regal.', options: ['im', 'in der', 'in dem'], answer: 'im', hint: 'in + Dativ (im = in dem)' },
+      { sentence: 'Wir sitzen am Tisch.', options: ['am', 'an der', 'an dem'], answer: 'am', hint: 'an + Dativ (am = an dem)' },
+      { sentence: 'Ich warte am Bahnhof.', options: ['am', 'an der', 'an dem'], answer: 'am', hint: 'an + Dativ (am = an dem)' },
+      { sentence: 'Das Geschenk ist für Mutter.', options: ['die', 'der', 'den', 'dem'], answer: 'die', hint: 'für + Akkusativ' },
+      { sentence: 'Er geht ohne Schlüssel.', options: ['der', 'den', 'dem', 'des'], answer: 'den', hint: 'ohne + Akkusativ' },
+      { sentence: 'Wir gehen durch Park.', options: ['der', 'den', 'dem', 'des'], answer: 'den', hint: 'durch + Akkusativ' },
+      { sentence: 'Er fährt gegen Wand.', options: ['die', 'der', 'den', 'dem'], answer: 'die', hint: 'gegen + Akkusativ' },
+      { sentence: 'Der Hund läuft um Haus.', options: ['das', 'dem', 'den', 'des'], answer: 'das', hint: 'um + Akkusativ' },
+      { sentence: 'Ich bleibe bis Montag.', options: ['der', 'den', 'dem', 'des'], answer: 'den', hint: 'bis + Akkusativ' },
+      { sentence: 'Ich spreche mit Freund.', options: ['der', 'den', 'dem', 'des'], answer: 'dem', hint: 'mit + Dativ' },
+      { sentence: 'Sie kauft Blumen für Freundin.', options: ['die', 'der', 'den', 'dem'], answer: 'die', hint: 'für + Akkusativ' },
+      { sentence: 'Wir fahren zum Bahnhof.', options: ['zum', 'zur', 'zu den'], answer: 'zum', hint: 'zu + Dativ (zum = zu dem)' },
+      { sentence: 'Er geht ohne Jacke.', options: ['die', 'der', 'den', 'dem'], answer: 'die', hint: 'ohne + Akkusativ' },
+      { sentence: 'Die Suppe schmeckt Kind.', options: ['dem', 'den', 'das'], answer: 'dem', hint: 'Dativ (schmecken)' },
+      { sentence: 'Das Buch gehört Schüler.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (gehören)' },
+      { sentence: 'Der Film gefällt Frau.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'Dativ (gefallen)' },
+      { sentence: 'Ich glaube Freund.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'Dativ (glauben)' },
+      { sentence: 'Ich kenne Mann.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'Akkusativ (kennen)' },
+      { sentence: 'Wir besuchen Oma.', options: ['die', 'der', 'den'], answer: 'die', hint: 'Akkusativ (besuchen)' },
+      { sentence: 'Er repariert Auto.', options: ['das', 'dem', 'den'], answer: 'das', hint: 'Akkusativ (reparieren)' },
+      { sentence: 'Sie liest Buch.', options: ['das', 'dem', 'den'], answer: 'das', hint: 'Akkusativ (lesen)' },
+      { sentence: 'Das Bild hängt an Wand.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'an + Dativ (Wo?)' },
+      { sentence: 'Wir sitzen auf Sofa.', options: ['dem', 'den', 'das'], answer: 'dem', hint: 'auf + Dativ (Wo?)' },
+      { sentence: 'Die Katze schläft unter Tisch.', options: ['dem', 'den', 'der'], answer: 'dem', hint: 'unter + Dativ (Wo?)' },
+      { sentence: 'Die Schuhe stehen vor Tür.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'vor + Dativ (Wo?)' },
+      { sentence: 'Ich hänge das Bild an Wand.', options: ['die', 'der', 'den'], answer: 'die', hint: 'an + Akkusativ (Wohin?)' },
+      { sentence: 'Wir setzen uns auf Sofa.', options: ['das', 'dem', 'den'], answer: 'das', hint: 'auf + Akkusativ (Wohin?)' },
+      { sentence: 'Die Katze läuft unter Tisch.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'unter + Akkusativ (Wohin?)' },
+      { sentence: 'Er stellt die Schuhe vor Tür.', options: ['die', 'der', 'den'], answer: 'die', hint: 'vor + Akkusativ (Wohin?)' },
+      { sentence: 'Wir gehen durch Wald.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'durch + Akkusativ' },
+      { sentence: 'Er kommt aus Haus.', options: ['dem', 'den', 'das'], answer: 'dem', hint: 'aus + Dativ' },
+      { sentence: 'Das ist für Vater.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'für + Akkusativ' },
+      { sentence: 'Ich wohne bei Tante.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'bei + Dativ' },
+      { sentence: 'Wir fahren nach Arbeit.', options: ['der', 'die', 'dem'], answer: 'der', hint: 'nach + Dativ' },
+      { sentence: 'Er läuft gegen Baum.', options: ['den', 'dem', 'der'], answer: 'den', hint: 'gegen + Akkusativ' }
+    ];
 
-    const LOG_KEY = "answerLogV1";
+    // Leicht = toggle LEFT (inactive) = hints visible
+    // Schwer = toggle RIGHT (active)  = hints hidden
+    let currentIndex = 0, correct = 0, wrong = 0, showHint = true;
+    let theme = localStorage.getItem('dativ-theme') || 'light';
+    const LOG_KEY = 'answerLogV1';
     let answerLog = [];
 
-    const ARTICLES = new Set([
-      "der","die","das","den","dem","des",
-      "ein","eine","einen","einem","einer","eines"
-    ]);
+    const ARTICLES = new Set(['der', 'die', 'das', 'den', 'dem', 'des', 'ein', 'eine', 'einen', 'einem', 'einer', 'eines']);
+    const PREPS = new Set(['mit', 'bei', 'von', 'zu', 'aus', 'seit', 'für', 'ohne', 'durch', 'gegen', 'um', 'bis', 'auf']);
 
-    const PREPS = new Set([
-      "mit","bei","von","zu","aus","seit",
-      "für","ohne","durch","gegen","um","bis","auf"
-    ]);
+    function applyTheme(t) {
+      document.documentElement.setAttribute('data-theme', t);
+      document.getElementById('themeBtn').innerHTML = t === 'light' ? '&#9681;' : '&#9680;';
+    }
+    document.getElementById('themeBtn').onclick = () => {
+      theme = theme === 'light' ? 'dark' : 'light';
+      localStorage.setItem('dativ-theme', theme);
+      applyTheme(theme);
+    };
 
-    function shuffleArray(a){
-      for(let i = a.length - 1; i > 0; i--){
+    document.getElementById('hintToggle').onclick = () => {
+      showHint = !showHint;
+      // active = Schwer = no hints
+      document.getElementById('hintToggle').classList.toggle('active', !showHint);
+      const h = document.getElementById('hint');
+      if (showHint) { h.classList.remove('hidden'); } else { h.classList.add('hidden'); }
+    };
+
+    function shuffleArray(a) {
+      for (let i = a.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [a[i], a[j]] = [a[j], a[i]];
       }
     }
+    function cleanToken(tok) { return tok.replace(/[.,!?;:]+$/g, ''); }
+    function isNounToken(tok) { return /^[A-ZÄÖÜ]/.test(cleanToken(tok)); }
 
-    function cleanToken(tok){
-      return tok.replace(/[.,!?;:]+$/g, "");
-    }
-
-    function isNounToken(tok){
-      const w = cleanToken(tok);
-      return /^[A-ZÄÖÜ]/.test(w);
-    }
-
-    // Inserts ONE blank underline (no ___ text) before the target noun
-    function renderSentenceWithBlank(sentence){
+    function renderSentenceWithBlank(sentence) {
       const tokens = String(sentence).split(/\s+/).filter(Boolean);
-      if(tokens.length === 0) return sentence;
-
-      // 1) Prefer noun right after a known preposition
-      for(let i = 0; i < tokens.length - 1; i++){
+      if (!tokens.length) return sentence;
+      for (let i = 0; i < tokens.length - 1; i++) {
         const t = cleanToken(tokens[i]).toLowerCase();
-        const nextLower = cleanToken(tokens[i + 1]).toLowerCase();
-
-        if(PREPS.has(t) && isNounToken(tokens[i + 1]) && !ARTICLES.has(nextLower)){
-          tokens[i + 1] = `<span class="blank"></span>` + tokens[i + 1];
-          return tokens.join(" ");
+        const nL = cleanToken(tokens[i + 1]).toLowerCase();
+        if (PREPS.has(t) && isNounToken(tokens[i + 1]) && !ARTICLES.has(nL)) {
+          tokens[i + 1] = '<span class="blank"></span>' + tokens[i + 1];
+          return tokens.join(' ');
         }
       }
-
-      // 2) Otherwise: first noun that doesn't already have an article right before it
-      for(let i = 1; i < tokens.length; i++){
-        const prevLower = cleanToken(tokens[i - 1]).toLowerCase();
-        const curLower = cleanToken(tokens[i]).toLowerCase();
-
-        if(isNounToken(tokens[i]) && !ARTICLES.has(prevLower) && !ARTICLES.has(curLower)){
-          tokens[i] = `<span class="blank"></span>` + tokens[i];
-          return tokens.join(" ");
+      for (let i = 1; i < tokens.length; i++) {
+        const pL = cleanToken(tokens[i - 1]).toLowerCase();
+        const cL = cleanToken(tokens[i]).toLowerCase();
+        if (isNounToken(tokens[i]) && !ARTICLES.has(pL) && !ARTICLES.has(cL)) {
+          tokens[i] = '<span class="blank"></span>' + tokens[i];
+          return tokens.join(' ');
         }
       }
-
       return sentence;
-    }
-
-    function startQuiz(){
-      shuffleArray(questions);
-      currentIndex = 0;
-      correct = 0;
-      wrong = 0;
-      updateScore();
-      showQuestion();
-    }
-
-    function showQuestion(){
-      const q = questions[currentIndex];
-
-      document.getElementById("sentence").innerHTML = renderSentenceWithBlank(q.sentence);
-
-      const hintEl = document.getElementById("hint");
-      hintEl.textContent = q.hint;
-      hintEl.classList.toggle("hidden", !showHint);
-
-      const opts = [...q.options];
-      shuffleArray(opts);
-
-      const box = document.getElementById("options");
-      box.innerHTML = "";
-
-      opts.forEach(opt => {
-        const btn = document.createElement("button");
-        btn.className = "option";
-        btn.textContent = opt;
-        btn.onclick = () => handleAnswer(btn, opt);
-        box.appendChild(btn);
-      });
-
-      document.getElementById("feedback").textContent = "";
-    }
-
-    function handleAnswer(btn, sel){
-      const q = questions[currentIndex];
-
-      document.querySelectorAll(".option").forEach(b => {
-        b.disabled = true;
-        b.classList.add("disabled");
-        if(b.textContent === q.answer) b.classList.add("correct");
-      });
-
-      if(sel === q.answer){
-        correct++;
-        feedback("Richtig!", "#16a34a");
-      }else{
-        wrong++;
-        btn.classList.add("wrong");
-        feedback("Falsch!", "#dc2626");
-      }
-
-      updateScore();
-      addLogEntry(sel, q.answer, sel === q.answer);
-
-      setTimeout(() => {
-        currentIndex = (currentIndex + 1) % questions.length;
-        showQuestion();
-      }, 1200);
-    }
-
-    function feedback(t, c){
-      const f = document.getElementById("feedback");
-      f.textContent = t;
-      f.style.color = c;
-    }
-
-    function updateScore(){
-      document.getElementById("correct-count").textContent = correct;
-      document.getElementById("wrong-count").textContent = wrong;
-    }
-
-    // Hint switch
-    document.getElementById("toggle-switch").onclick = () => {
-      showHint = !showHint;
-      document.getElementById("toggle-switch").classList.toggle("active", showHint);
-      document.getElementById("hint").classList.toggle("hidden", !showHint);
-    };
-
-    // ---- LOG (bottom) ----
-    function loadLog(){
-      try { answerLog = JSON.parse(localStorage.getItem(LOG_KEY)) || []; }
-      catch(e){ answerLog = []; }
-    }
-
-    function saveLog(){
-      localStorage.setItem(LOG_KEY, JSON.stringify(answerLog));
-    }
-
-    function updateLogCount(){
-      document.getElementById("log-count").textContent = String(answerLog.length);
-    }
-
-    function renderLog(){
-      const list = document.getElementById("log-list");
-
-      if(!answerLog.length){
-        list.innerHTML = `<div class="log-item"><span class="meta">Noch leer.</span></div>`;
-        updateLogCount();
-        return;
-      }
-
-      list.innerHTML = answerLog.map(e => {
-        const dt = new Date(e.t).toLocaleString();
-        const mark = e.ok ? `<span class="ok">✓</span>` : `<span class="bad">✗</span>`;
-        return `
-          <div class="log-item">
-            ${mark} ${e.sentence}
-            <div class="meta">${dt} · ausgewählt: <b>${e.selected}</b> · richtig: <b>${e.correct}</b></div>
-          </div>
-        `;
-      }).join("");
-
-      updateLogCount();
     }
 
     function getCompletedSentence(sentence, answer) {
       const tokens = String(sentence).split(/\s+/).filter(Boolean);
-      const ansUpper = answer.toUpperCase();
-      if(tokens.length === 0) return sentence;
-
-      // 1) Prefer noun right after a known preposition
-      for(let i = 0; i < tokens.length - 1; i++){
+      const ans = answer.toUpperCase();
+      if (!tokens.length) return sentence;
+      for (let i = 0; i < tokens.length - 1; i++) {
         const t = cleanToken(tokens[i]).toLowerCase();
-        const nextLower = cleanToken(tokens[i + 1]).toLowerCase();
-
-        if(PREPS.has(t) && isNounToken(tokens[i + 1]) && !ARTICLES.has(nextLower)){
-          tokens[i + 1] = ansUpper + " " + tokens[i + 1];
-          return tokens.join(" ");
+        const nL = cleanToken(tokens[i + 1]).toLowerCase();
+        if (PREPS.has(t) && isNounToken(tokens[i + 1]) && !ARTICLES.has(nL)) {
+          tokens[i + 1] = ans + ' ' + tokens[i + 1]; return tokens.join(' ');
         }
       }
-
-      // 2) Otherwise: first noun that doesn't already have an article right before it
-      for(let i = 1; i < tokens.length; i++){
-        const prevLower = cleanToken(tokens[i - 1]).toLowerCase();
-        const curLower = cleanToken(tokens[i]).toLowerCase();
-
-        if(isNounToken(tokens[i]) && !ARTICLES.has(prevLower) && !ARTICLES.has(curLower)){
-          tokens[i] = ansUpper + " " + tokens[i];
-          return tokens.join(" ");
+      for (let i = 1; i < tokens.length; i++) {
+        const pL = cleanToken(tokens[i - 1]).toLowerCase();
+        const cL = cleanToken(tokens[i]).toLowerCase();
+        if (isNounToken(tokens[i]) && !ARTICLES.has(pL) && !ARTICLES.has(cL)) {
+          tokens[i] = ans + ' ' + tokens[i]; return tokens.join(' ');
         }
       }
-
       return sentence;
     }
 
-    function addLogEntry(selected, correctAnswer, isCorrect){
-      // take what user sees (without HTML)
-      const sentenceText = getCompletedSentence(questions[currentIndex].sentence, correctAnswer);
+    function startQuiz() {
+      shuffleArray(questions);
+      currentIndex = 0; correct = 0; wrong = 0;
+      updateScore(); showQuestion();
+    }
 
-      answerLog.unshift({
-        t: Date.now(),
-        sentence: sentenceText,
-        selected,
-        correct: correctAnswer,
-        ok: isCorrect
+    function showQuestion() {
+      const q = questions[currentIndex];
+      document.getElementById('sentence').innerHTML = renderSentenceWithBlank(q.sentence);
+      const hintEl = document.getElementById('hint');
+      hintEl.textContent = q.hint;
+      hintEl.classList.toggle('hidden', !showHint);
+      const fb = document.getElementById('feedback');
+      fb.textContent = ''; fb.className = 'feedback';
+      const opts = [...q.options]; shuffleArray(opts);
+      const box = document.getElementById('options');
+      box.innerHTML = '';
+      opts.forEach(opt => {
+        const btn = document.createElement('button');
+        btn.className = 'option'; btn.textContent = opt;
+        btn.onclick = () => handleAnswer(btn, opt);
+        box.appendChild(btn);
       });
+    }
 
+    function handleAnswer(btn, sel) {
+      const q = questions[currentIndex];
+      document.querySelectorAll('.option').forEach(b => {
+        b.disabled = true; b.classList.add('disabled');
+        if (b.textContent === q.answer) b.classList.add('correct');
+      });
+      const fb = document.getElementById('feedback');
+      if (sel === q.answer) { correct++; fb.textContent = 'Richtig!'; fb.className = 'feedback ok'; }
+      else { wrong++; btn.classList.add('wrong'); fb.textContent = 'Falsch!'; fb.className = 'feedback bad'; }
+      updateScore();
+      addLogEntry(sel, q.answer, sel === q.answer);
+      setTimeout(() => { currentIndex = (currentIndex + 1) % questions.length; showQuestion(); }, 1200);
+    }
+
+    function updateScore() {
+      document.getElementById('correct-count').textContent = correct;
+      document.getElementById('wrong-count').textContent = wrong;
+    }
+
+    function loadLog() { try { answerLog = JSON.parse(localStorage.getItem(LOG_KEY)) || []; } catch (e) { answerLog = []; } }
+    function saveLog() { localStorage.setItem(LOG_KEY, JSON.stringify(answerLog)); }
+    function updateLogCount() { document.getElementById('log-count').textContent = answerLog.length; }
+
+    function renderLog() {
+      const list = document.getElementById('log-list');
+      if (!answerLog.length) {
+        list.innerHTML = '<div class="log-item"><span style="color:var(--text-faint);font-style:italic">Noch leer.</span></div>';
+        updateLogCount(); return;
+      }
+      list.innerHTML = answerLog.map(e => {
+        const dt = new Date(e.t).toLocaleString();
+        const mark = e.ok ? '<span class="ok-mark">✓</span>' : '<span class="bad-mark">✗</span>';
+        return '<div class="log-item">' + mark + ' ' + e.sentence +
+          '<div class="meta">' + dt + ' · ausgewählt: <b>' + e.selected + '</b> · richtig: <b>' + e.correct + '</b></div></div>';
+      }).join('');
+      updateLogCount();
+    }
+
+    function addLogEntry(selected, correctAnswer, isCorrect) {
+      const sentenceText = getCompletedSentence(questions[currentIndex].sentence, correctAnswer);
+      answerLog.unshift({ t: Date.now(), sentence: sentenceText, selected, correct: correctAnswer, ok: isCorrect });
       answerLog = answerLog.slice(0, 300);
-      saveLog();
-      renderLog();
+      saveLog(); renderLog();
     }
 
-    function clearLog(){
-      answerLog = [];
-      saveLog();
-      renderLog();
-    }
-
-    function isLogOpen(){
-      return !document.getElementById("log-box").classList.contains("hidden");
-    }
-
-    function toggleLog(){
-      document.getElementById("log-box").classList.toggle("hidden");
-      if (isLogOpen()) renderLog();
-    }
-
-    document.getElementById("log-toggle").onclick = toggleLog;
-    document.getElementById("log-clear").onclick = clearLog;
-
-    window.onload = () => {
-      loadLog();
-      renderLog();
-      startQuiz();
+    document.getElementById('log-toggle').onclick = () => {
+      document.getElementById('log-box').classList.toggle('hidden');
+      if (!document.getElementById('log-box').classList.contains('hidden')) renderLog();
     };
+    document.getElementById('log-clear').onclick = () => { answerLog = []; saveLog(); renderLog(); };
+
+    applyTheme(theme);
+    loadLog(); renderLog(); startQuiz();
   </script>
 </body>
+
 </html>
